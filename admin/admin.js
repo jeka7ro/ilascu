@@ -794,14 +794,16 @@ async function saveFooterText() {
 async function uploadFavicon(input) {
     const file = input.files[0];
     if (!file) return;
+    showToast('Se încarcă favicon...', 'info');
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('files', file); // backend expects 'files' array
     try {
         const res = await fetch('/api/upload/photo', { method: 'POST', body: formData });
         const data = await res.json();
-        if (data.success) {
+        // The backend returns an array of results
+        if (data && data[0] && data[0].success) {
             contentData.settings = contentData.settings || {};
-            contentData.settings.favicon = data.path;
+            contentData.settings.favicon = data[0].path;
             renderSection('settings');
             
             // Actualizează favicon-ul în admin instantaneu
@@ -811,12 +813,17 @@ async function uploadFavicon(input) {
                 link.rel = 'icon';
                 document.head.appendChild(link);
             }
-            link.href = '/' + data.path;
+            link.href = data[0].path;
             
             await saveAllContent();
-            showToast('✓ Favicon încărcat și salvat automat pe site!', 'success');
+            // showToast is already handled inside saveAllContent, but we can add a specific message if needed
+        } else {
+            showToast('Eroare la procesarea fișierului', 'error');
         }
-    } catch (err) { showToast('Eroare la încărcare favicon', 'error'); }
+    } catch (err) { 
+        console.error(err);
+        showToast('Eroare la încărcare favicon', 'error'); 
+    }
 }
 
 // ── Collect Form Data ─────────────────────────────────
