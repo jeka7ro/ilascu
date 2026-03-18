@@ -172,7 +172,7 @@ const uploadPhoto = multer({
     storage: photoStorage, 
     limits: { fileSize: 20 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        const allowed = /jpeg|jpg|png|gif|webp|svg/;
+        const allowed = /jpeg|jpg|png|gif|webp|svg|ico|icon/;
         cb(null, allowed.test(path.extname(file.originalname).toLowerCase()) || allowed.test(file.mimetype));
     }
 });
