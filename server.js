@@ -362,9 +362,12 @@ app.get('/admin', (req, res) => {
 });
 
 // ── Start ─────────────────────────────────────────────
-app.listen(PORT, () => {
-    console.log(`\n🏛️  Ilascu Memorial Server`);
-    console.log(`   Public:  http://localhost:${PORT}`);
-    console.log(`   Admin:   http://localhost:${PORT}/admin`);
-    console.log(`   Ready!\n`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`\n🏛️  Ilascu Memorial Server`);
+        console.log(`   Public:  http://localhost:${PORT}`);
+        console.log(`   Admin:   http://localhost:${PORT}/admin`);
+        console.log(`   Ready!\n`);
+    });
+}
+module.exports = app;
