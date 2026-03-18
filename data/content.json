@@ -1,0 +1,333 @@
+{
+  "hero": {
+    "title": {
+      "ro": "Ilie Ilașcu - Erou",
+      "en": "Ilie Ilașcu"
+    },
+    "subtitle": {
+      "ro": "Viața și Activitatea Patriotică - Verificat",
+      "en": "Life and Patriotic Activity"
+    },
+    "dates": {
+      "ro": "1952 - 2025",
+      "en": "1952 - 2025"
+    },
+    "quote": {
+      "ro": "Un simbol al rezistenței românești și al luptei pentru libertate.",
+      "en": "A symbol of Romanian resistance and the struggle for freedom."
+    },
+    "image": "images/ilie-ilascu-hero.jpg"
+  },
+  "biography": {
+    "image": "images/ilie-ilascu-biography.jpg",
+    "paragraphs": [
+      {
+        "ro": "Ilie Ilașcu (30 iulie 1952 – 17 noiembrie 2025) a fost un politician și disident român moldovean, simbol al rezistenței împotriva separatismului transnistrean. Născut în satul Taxobeni, raionul Fălești, Republica Moldova, a fost unul dintre fondatorii Mișcării de Eliberare Națională din Basarabia (1988-1992) și președinte al Frontului Popular din Moldova - Filiala Tiraspol (1989-1992). (Test Edit)",
+        "en": "Ilie Ilașcu (30 iulie 1952 – 17 noiembrie 2025) a fost un politician și dissident român moldovean, symbol al resistance împotriva separatism Transnistrian. Born în village Taxobeni, raionul Fălești, Republica Moldova, a fost unul dintre founders Movement de Liberation Națională din Basarabia (1988-1992) și president al Front Popular din Moldova - Filiala Tiraspol (1989-1992). (Test Edit)"
+      },
+      {
+        "ro": "În 1992, a fost arestat de forțele speciale rusești și condamnat la moarte de regimul transnistrean, rămânând închis în condiții grele timp de nouă ani, până la eliberarea sa pe 5 mai 2001, după presiuni internaționale din partea Consiliului Europei și a Uniunii Europene. În 2004, Curtea Europeană a Drepturilor Omului a decis că atât Rusia cât și Republica Moldova sunt responsabile pentru tortură și lipsire ilegală de libertate în cazul său.",
+        "en": "In 1992, he was arrested by Russian special forces and sentenced to death by the Transnistrian regime, remaining imprisoned under harsh conditions for nine years until his release on May 5, 2001, following international pressure from the Council of Europe and the European Union. In 2004, the European Court of Human Rights ruled that both Russia and the Republic of Moldova were responsible for torture and unlawful deprivation of liberty in his case."
+      },
+      {
+        "ro": "A servit ca deputat în Parlamentul Republicii Moldova (1994-2001, inclusiv în timpul detenției) și ca senator în Parlamentul României (2000-2008). A fost membru al Adunării Parlamentare a Consiliului Europei (2001-2008) și a fost decorat cu Ordinul Național \"Steaua României\" și Ordinul Republicii din Moldova.",
+        "en": "He served as a deputy in the Parliament of the Republic of Moldova (1994-2001, including during his detention) and as a senator in the Romanian Parliament (2000-2008). He was a member of the Parliamentary Assembly of the Council of Europe (2001-2008) and was decorated with the National Order \"Star of Romania\" and the Order of the Republic of Moldova."
+      },
+      {
+        "ro": "Buna ziua, ma numesc Andrei si sunt putin debil",
+        "en": "Hello, my name is Andrei si am a bit weak/idiot"
+      }
+    ]
+  },
+  "activities": [
+    {
+      "id": "act-1",
+      "title": {
+        "ro": "Mișcarea de Eliberare Națională",
+        "en": "National Liberation Movement"
+      },
+      "text": {
+        "ro": "Fondator și lider al Mișcării de Eliberare Națională din Basarabia (1988-1992) și președinte al Frontului Popular din Moldova - Filiala Tiraspol, care a ajuns la peste 5000 de membri activi înainte de a fi lichidată de forțele separatiste.",
+        "en": "Founder and leader of the National Liberation Movement in Bessarabia (1988-1992) and president of the Popular Front of Moldova - Tiraspol Branch, which reached over 5,000 active members before being liquidated by separatist forces."
+      },
+      "image": "https://media.radiochisinau.md/image/201802/660x370/f721391d33dc91540184b34077eab709.jpg",
+      "order": 0
+    },
+    {
+      "id": "act-2",
+      "title": {
+        "ro": "Lupta Armata de la Nistru",
+        "en": "Armed Struggle at the Dniester"
+      },
+      "text": {
+        "ro": "În 1992, a participat la luptele armate de la Nistru în calitate de comandant al unor trupe speciale ale Ministerului Securității Naționale din Republica Moldova, luptând în spatele frontului și provocând mari pierderi Armatei 14 Rusești.",
+        "en": "In 1992, he participated in the armed struggles at the Dniester as a commander of special troops of the Ministry of National Security of the Republic of Moldova, fighting behind front lines and causing heavy losses to the 14th Russian Army."
+      },
+      "image": "https://news.ungheni.org/wp-content/uploads/2021/03/Razboiul-moldo-rus-din-1992.jpg",
+      "order": 1
+    },
+    {
+      "id": "act-4",
+      "title": {
+        "ro": "Activitate Parlamentară",
+        "en": "Parliamentary Activity"
+      },
+      "text": {
+        "ro": "Deputat în Parlamentul Republicii Moldova (1994-2001, inclusiv în timpul detenției) și senator în Parlamentul României (2000-2008), membru al Adunării Parlamentare a Consiliului Europei (2001-2008).",
+        "en": "Deputy in the Parliament of the Republic of Moldova (1994-2001, including during his detention) and senator in the Romanian Parliament (2000-2008), member of the Parliamentary Assembly of the Council of Europe (2001-2008)."
+      },
+      "image": "images/activitate-4-parlament.png",
+      "order": 2
+    },
+    {
+      "id": "act-5",
+      "title": {
+        "ro": "Apărarea Identității Românești",
+        "en": "Defense of Romanian Identity"
+      },
+      "text": {
+        "ro": "Susținător vocal al drepturilor limbii române, identității românești și al aliniierii Republicii Moldova cu România și Europa, promovând valorile culturale și naționale românești.",
+        "en": "Vocal advocate for the rights of the Romanian language, Romanian identity, and the alignment of the Republic of Moldova with Romania and Europe, promoting Romanian cultural and national values."
+      },
+      "image": "images/activitate-5-identitate.png",
+      "order": 3
+    },
+    {
+      "id": "act-6",
+      "title": {
+        "ro": "Recunoaștere Internațională",
+        "en": "International Recognition"
+      },
+      "text": {
+        "ro": "Cazul său a fost judecat de Curtea Europeană a Drepturilor Omului, care a decis în 2004 că Rusia și Republica Moldova sunt responsabile pentru încălcarea drepturilor omului. A fost decorat cu Ordinul Național \"Steaua României\" și Ordinul Republicii din Moldova.",
+        "en": "His case was judged by the European Court of Human Rights, which ruled in 2004 that Russia and the Republic of Moldova were responsible for human rights violations. He was decorated with the National Order \"Star of Romania\" and the Order of the Republic of Moldova."
+      },
+      "image": "images/activitate-6-recunoastere.png",
+      "order": 4
+    },
+    {
+      "id": "act-3",
+      "title": {
+        "ro": "Rezistența în Detenție",
+        "en": "Resistance in Detention"
+      },
+      "text": {
+        "ro": "A rămas închis timp de nouă ani (1992-2001) în condiții grele, condamnat la moarte de o instanță neconstituțională, dar a continuat să lupte pentru cauza românilor basarabeni și pentru unirea cu România.",
+        "en": "He remained imprisoned for nine years (1992-2001) under harsh conditions, sentenced to death by an unconstitutional court, but continued to fight for the cause of Bessarabian Romanians and for unification with Romania."
+      },
+      "image": "",
+      "order": 5
+    }
+  ],
+  "photos": [
+    {
+      "id": "photo-1",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Ilie_Ila%C8%99cu_2009.jpg/800px-Ilie_Ila%C8%99cu_2009.jpg",
+      "caption": {
+        "ro": "Ilie Ilascu în Parcul Cișmigiu, București (2009)",
+        "en": "Ilie Ilascu in Cișmigiu Park, Bucharest (2009)"
+      },
+      "order": 0
+    },
+    {
+      "id": "photo-2",
+      "src": "images/ilie-ilascu-biography.jpg",
+      "caption": {
+        "ro": "Ilie Ilascu - Portret biografic",
+        "en": "Ilie Ilascu - Biographical Portrait"
+      },
+      "order": 1
+    },
+    {
+      "id": "photo-3",
+      "src": "images/ilie-ilascu-hero.jpg",
+      "caption": {
+        "ro": "Ilie Ilascu - Portret oficial",
+        "en": "Ilie Ilascu - Official Portrait"
+      },
+      "order": 2
+    },
+    {
+      "id": "photo-4",
+      "src": "images/1773762157537-00000004-0000-5000-9000-000000000122.png",
+      "caption": {
+        "ro": "Foto 4",
+        "en": "Photo 4"
+      },
+      "order": 3
+    },
+    {
+      "id": "photo-5",
+      "src": "images/1773762157537-00000004-0000-5000-9000-000000000040.png",
+      "caption": {
+        "ro": "Foto 5",
+        "en": "Photo 5"
+      },
+      "order": 4
+    },
+    {
+      "id": "photo-6",
+      "src": "images/1773762157538-59878cce-0ad2-469c-b13a-33215f757261.png",
+      "caption": {
+        "ro": "Foto 6",
+        "en": "Photo 6"
+      },
+      "order": 5
+    },
+    {
+      "id": "photo-7",
+      "src": "images/1773762157538-00000004-0000-5000-9000-000000000156.png",
+      "caption": {
+        "ro": "Foto 7",
+        "en": "Photo 7"
+      },
+      "order": 6
+    },
+    {
+      "id": "photo-8",
+      "src": "images/1773762157538-00000004-0000-5000-9000-000000000012.png",
+      "caption": {
+        "ro": "Foto 8",
+        "en": "Photo 8"
+      },
+      "order": 7
+    },
+    {
+      "id": "photo-9",
+      "src": "images/1773762157538-00000004-0000-5000-9000-000000000025.png",
+      "caption": {
+        "ro": "Foto 9",
+        "en": "Photo 9"
+      },
+      "order": 8
+    },
+    {
+      "id": "photo-10",
+      "src": "images/1773762369533-sushi_promo_1_1769860927000.png",
+      "caption": {
+        "ro": "Sushi Promo 1",
+        "en": "Sushi Promo 1"
+      },
+      "order": 9
+    },
+    {
+      "id": "photo-11",
+      "src": "images/1773762369540-sushi_promo_2_1769860939446.png",
+      "caption": {
+        "ro": "Sushi Promo 2",
+        "en": "Sushi Promo 2"
+      },
+      "order": 10
+    },
+    {
+      "id": "photo-12",
+      "src": "images/1773762369542-sushi_promo_3_1769860952024.png",
+      "caption": {
+        "ro": "Sushi Promo 3",
+        "en": "Sushi Promo 3"
+      },
+      "order": 11
+    }
+  ],
+  "videos": [
+    {
+      "id": "video-17737620790940",
+      "url": "videos/1773762079068-burger1.mp4",
+      "title": {
+        "ro": "burger1",
+        "en": "burger1"
+      },
+      "type": "file",
+      "order": 0
+    },
+    {
+      "id": "video-17737620790951",
+      "url": "videos/1773762079074-burger2.mp4",
+      "title": {
+        "ro": "burger2",
+        "en": "burger2"
+      },
+      "type": "file",
+      "order": 1
+    },
+    {
+      "id": "video-17737620790952",
+      "url": "videos/1773762079078-burger3.mp4",
+      "title": {
+        "ro": "burger3",
+        "en": "burger3"
+      },
+      "type": "file",
+      "order": 2
+    },
+    {
+      "id": "video-17737620790953",
+      "url": "videos/1773762079082-burger4.mp4",
+      "title": {
+        "ro": "burger4",
+        "en": "burger4"
+      },
+      "type": "file",
+      "order": 3
+    },
+    {
+      "id": "video-17737620790954",
+      "url": "videos/1773762079087-burger5.mp4",
+      "title": {
+        "ro": "burger5",
+        "en": "burger5"
+      },
+      "type": "file",
+      "order": 4
+    }
+  ],
+  "contact": {
+    "email": "contact@ilieilascu.ro",
+    "phone": "+40 XXX XXX XXX",
+    "address": {
+      "ro": "București, România",
+      "en": "Bucharest, Romania"
+    }
+  },
+  "sectionOrder": [
+    "hero",
+    "biography",
+    "activities",
+    "gallery",
+    "videos",
+    "contact"
+  ],
+  "background": {
+    "heroGradient": "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+    "heroOverlayOpacity": 0.3,
+    "sectionAltBg": "#f8f9fa",
+    "footerBg": "#2c3e50"
+  },
+  "settings": {
+    "favicon": ""
+  },
+  "adminPassword": "secure2026",
+  "externalLinks": [
+    {
+      "id": "link-1",
+      "title": {
+        "ro": "Ilie Ilașcu - Wikipedia",
+        "en": "Ilie Ilașcu - Wikipedia"
+      },
+      "url": "https://ro.wikipedia.org/wiki/Ilie_Ila%C8%99cu",
+      "order": 0
+    },
+    {
+      "id": "link-2",
+      "title": {
+        "ro": "Documentar - Ilie Ilașcu",
+        "en": "Documentary - Ilie Ilașcu"
+      },
+      "url": "https://www.youtube.com/watch?v=cGpxv8KBV_Q",
+      "order": 1
+    }
+  ],
+  "adminEmails": [
+    "admin@ilieilascu.ro"
+  ]
+}

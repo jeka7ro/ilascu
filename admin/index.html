@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Ilie Ilașcu Memorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="login-icon">🏛️</div>
+                <h1>Admin Panel</h1>
+                <p>Ilie Ilașcu Memorial</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-field">
+                    <label for="loginEmail">Email Administrator</label>
+                    <input type="email" id="loginEmail" placeholder="admin@ilieilascu.ro" required>
+                </div>
+                <div class="form-field">
+                    <label for="loginPassword">Parolă</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login">Autentificare</button>
+                <div id="loginError" class="login-error" style="display:none;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="dashboard" style="display:none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">🏛️</div>
+                <h2>Admin CMS</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="hero">
+                    <span class="nav-icon">🏠</span>
+                    <span>Hero</span>
+                </a>
+                <a href="#" class="nav-item" data-section="biography">
+                    <span class="nav-icon">📖</span>
+                    <span>Biografie</span>
+                </a>
+                <a href="#" class="nav-item" data-section="activities">
+                    <span class="nav-icon">⭐</span>
+                    <span>Activități</span>
+                </a>
+                <a href="#" class="nav-item" data-section="photos">
+                    <span class="nav-icon">📷</span>
+                    <span>Galerie Foto</span>
+                </a>
+                <a href="#" class="nav-item" data-section="videos">
+                    <span class="nav-icon">🎬</span>
+                    <span>Galerie Video</span>
+                </a>
+                <a href="#" class="nav-item" data-section="links">
+                    <span class="nav-icon">🔗</span>
+                    <span>Linkuri Externe</span>
+                </a>
+                <a href="#" class="nav-item" data-section="background">
+                    <span class="nav-icon">🎨</span>
+                    <span>Fundal</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Setări</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-email" id="adminEmailDisplay"></div>
+                <button id="logoutBtn" class="btn-logout">Deconectare</button>
+                <a href="/" class="btn-view-site" target="_blank">🔗 Vezi Site</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1 id="sectionTitle">Hero</h1>
+                <div class="header-actions">
+                    <button id="saveBtn" class="btn-save" onclick="saveAllContent()">
+                        💾 Salvează Tot
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-area" id="contentArea">
+                <!-- Dynamic content sections rendered here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

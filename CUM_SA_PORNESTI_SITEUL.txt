@@ -1,0 +1,41 @@
+═══════════════════════════════════════════════════════════
+  CUM SĂ PORNESTI SERVERUL PENTRU SITE-UL ILIE ILASCU
+═══════════════════════════════════════════════════════════
+
+METODA 1 - TERMINAL (RECOMANDAT):
+─────────────────────────────────
+1. Deschide Terminal (Cmd+Space, scrie "Terminal")
+2. Copiază și execută aceste comenzi:
+
+   cd /Users/eugeniucazmal/Downloads/dev_office/ilascu
+   python3 -m http.server 8000
+
+3. Deschide browser-ul și mergi la:
+   http://localhost:8000
+
+4. Pentru a opri serverul, apasă Ctrl+C în Terminal
+
+
+METODA 2 - SCRIPT AUTOMAT:
+──────────────────────────
+1. Dă dublu-click pe fișierul: start_server.sh
+2. Se va deschide Terminal-ul cu serverul pornit
+3. Deschide browser-ul la: http://localhost:8000
+
+
+METODA 3 - FĂRĂ SERVER (LIMITAT):
+──────────────────────────────────
+1. Dă dublu-click pe: index.html
+2. Site-ul se va deschide în browser
+3. NOTĂ: Unele funcții JavaScript pot nu funcționa corect
+
+
+═══════════════════════════════════════════════════════════
+  Dacă ai probleme:
+═══════════════════════════════════════════════════════════
+
+- Verifică că Python 3 este instalat: python3 --version
+- Încearcă alt port: python3 -m http.server 8080
+- Verifică că nu există alt server pe portul 8000
+
+═══════════════════════════════════════════════════════════
