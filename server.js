@@ -131,97 +131,24 @@ app.post('/api/admin/translate', requireAdmin, async (req, res) => {
     if (!text) return res.status(400).json({ error: 'No text provided' });
 
     try {
-        // MOCK TRANSLATION LOGIC
-        // In a real production environment, you would use:
-        // - Google Cloud Translation API
-        // - DeepL API
-        // - LibreTranslate
+        // Query the free Google Translate extension endpoint
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await response.json();
         
-        const words = {
-            "politician": "politician",
-            "disident": "dissident",
-            "simbol": "symbol",
-            "rezistenței": "resistance",
-            "împotriva": "against",
-            "separatismului": "separatism",
-            "transnistrean": "Transnistrian",
-            "Născut": "Born",
-            "în": "in",
-            "satul": "village",
-            "fondatorii": "founders",
-            "Mișcării": "Movement",
-            "Eliberare": "Liberation",
-            "Națională": "National",
-            "președinte": "president",
-            "Frontului": "Front",
-            "Popular": "Popular",
-            "deputat": "deputy",
-            "Parlamentul": "Parliament",
-            "Republicii": "Republic",
-            "Moldova": "Moldova",
-            "senator": "senator",
-            "României": "Romania",
-            "membru": "member",
-            "Adunării": "Assembly",
-            "Parlamentare": "Parliamentary",
-            "Consiliului": "Council",
-            "Europei": "Europe",
-            "decorat": "decorated",
-            "Ordinul": "Order",
-            "Steaua": "Star",
-            "luptă": "struggle",
-            "libertate": "freedom",
-            "unitate": "unity",
-            "patriot": "patriot",
-            "eroi": "heroes",
-            "erou": "hero",
-            "activitate": "activity",
-            "viața": "life",
-            "biografie": "biography",
-            "interviu": "interview",
-            "discurs": "speech",
-            "public": "public",
-            "Buna ziua": "Hello",
-            "Buna": "Hello",
-            "ziua": "day",
-            "numele": "name",
-            "ma numesc": "my name is",
-            "numesc": "name",
-            "sunt": "am",
-            "putin": "a bit",
-            "debil": "weak/idiot",
-            "Andrei": "Andrei",
-            "istorie": "history",
-            "pace": "peace",
-            "familie": "family",
-            "Romania": "Romania",
-            "Basarabia": "Bessarabia",
-            "Tiraspol": "Tiraspol"
-        };
-
-        let translatedText = text;
-        
-        // Sort keys by length descending to match longer phrases first (e.g. "ma numesc" before "numesc")
-        const sortedWords = Object.entries(words).sort((a, b) => b[0].length - a[0].length);
-        
-        for (const [ro, en] of sortedWords) {
-            const regex = new RegExp(`\\b${ro}\\b`, 'gi');
-            translatedText = translatedText.replace(regex, en);
-        }
-
-        // If it was already in the paragraphs mock, keep those specific replacements
-        if (text.includes("politician și disident")) {
-            translatedText = translatedText.replace("politician și disident", "politician and dissident")
-                                .replace("simbol al rezistenței", "symbol of resistance")
-                                .replace("Născut în", "Born in");
+        let translatedText = '';
+        if (data && data[0]) {
+            data[0].forEach(part => {
+                if (part[0]) translatedText += part[0];
+            });
         }
         
-        // Simulating network delay for effect
-        setTimeout(() => {
+        if (translatedText) {
             res.json({ success: true, translatedText });
-        }, 800);
-        
+        } else {
+            throw new Error("Invalid response format");
+        }
     } catch (err) {
+        console.error('Translation error:', err);
         res.status(500).json({ error: 'Translation service failed' });
     }
 });
