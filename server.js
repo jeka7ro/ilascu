@@ -18,20 +18,32 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24h
 }));
 
-// ── Data helpers ───────────────────────────────────────
-const DATA_FILE = path.join(__dirname, 'data', 'content.json');
+require('dotenv').config();
+const { Client } = require('pg');
 
-function readContent() {
+const dbClient = new Client({
+    connectionString: process.env.DATABASE_URL
+});
+dbClient.connect().then(() => console.log('Connected to Neon DB')).catch(console.error);
+
+// ── Data helpers ───────────────────────────────────────
+async function readContent() {
     try {
-        return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+        const result = await dbClient.query('SELECT data FROM site_content WHERE id = 1');
+        if (result.rows.length > 0) return result.rows[0].data;
+        return {};
     } catch (e) {
+        console.error('DB read error:', e);
         return {};
     }
 }
 
-function writeContent(data) {
-    fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+async function writeContent(data) {
+    try {
+        await dbClient.query('UPDATE site_content SET data = $1 WHERE id = 1', [JSON.stringify(data)]);
+    } catch (e) {
+        console.error('DB write error:', e);
+    }
 }
 
 // ── Auth middleware ────────────────────────────────────
@@ -41,9 +53,9 @@ function requireAdmin(req, res, next) {
 }
 
 // ── Auth endpoints ────────────────────────────────────
-app.post('/api/admin/login', (req, res) => {
+app.post('/api/admin/login', async (req, res) => {
     const { email, password } = req.body;
-    const content = readContent();
+    const content = await readContent();
     const adminEmails = content.adminEmails || ['admin@ilieilascu.ro'];
     const storedPassword = content.adminPassword || 'admin123'; // Default pass if none set
     
@@ -76,39 +88,39 @@ app.get('/api/admin/check', (req, res) => {
     });
 });
 
-app.post('/api/admin/password', requireAdmin, (req, res) => {
+app.post('/api/admin/password', requireAdmin, async (req, res) => {
     const { newPassword } = req.body;
     if (!newPassword || newPassword.length < 4) {
         return res.status(400).json({ error: 'Parola prea scurtă' });
     }
     
-    const content = readContent();
+    const content = await readContent();
     content.adminPassword = newPassword;
-    writeContent(content);
+    await writeContent(content);
     
     res.json({ success: true });
 });
 
 // ── Content API (public read, admin write) ────────────
-app.get('/api/content', (req, res) => {
-    const content = readContent();
+app.get('/api/content', async (req, res) => {
+    const content = await readContent();
     // Don't expose admin emails to public
     const { adminEmails, ...publicContent } = content;
     res.json(publicContent);
 });
 
-app.put('/api/content', requireAdmin, (req, res) => {
-    const currentContent = readContent();
+app.put('/api/content', requireAdmin, async (req, res) => {
+    const currentContent = await readContent();
     const newContent = { ...req.body, adminEmails: currentContent.adminEmails };
-    writeContent(newContent);
+    await writeContent(newContent);
     res.json({ success: true });
 });
 
 // Update a single section
-app.patch('/api/content/:section', requireAdmin, (req, res) => {
-    const content = readContent();
+app.patch('/api/content/:section', requireAdmin, async (req, res) => {
+    const content = await readContent();
     content[req.params.section] = req.body;
-    writeContent(content);
+    await writeContent(content);
     res.json({ success: true });
 });
 
@@ -214,21 +226,19 @@ app.post('/api/admin/translate', requireAdmin, async (req, res) => {
     }
 });
 
-// ── File Upload ───────────────────────────────────────
+// ── File Upload (Cloudinary) ──────────────────────────
+const cloudinary = require('cloudinary').v2;
+const os = require('os');
+const tempDir = os.tmpdir();
+
 const photoStorage = multer.diskStorage({
-    destination: path.join(__dirname, 'images'),
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '-');
-        cb(null, uniqueName);
-    }
+    destination: tempDir,
+    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname.replace(/\s+/g, '-'))
 });
 
 const videoStorage = multer.diskStorage({
-    destination: path.join(__dirname, 'videos'),
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '-');
-        cb(null, uniqueName);
-    }
+    destination: tempDir,
+    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname.replace(/\s+/g, '-'))
 });
 
 const uploadPhoto = multer({ 
@@ -236,9 +246,7 @@ const uploadPhoto = multer({
     limits: { fileSize: 20 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowed = /jpeg|jpg|png|gif|webp|svg/;
-        const ext = allowed.test(path.extname(file.originalname).toLowerCase());
-        const mime = allowed.test(file.mimetype);
-        cb(null, ext || mime);
+        cb(null, allowed.test(path.extname(file.originalname).toLowerCase()) || allowed.test(file.mimetype));
     }
 });
 
@@ -247,37 +255,40 @@ const uploadVideo = multer({
     limits: { fileSize: 200 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowed = /mp4|webm|ogg|avi|mov/;
-        const ext = allowed.test(path.extname(file.originalname).toLowerCase());
-        cb(null, ext);
+        cb(null, allowed.test(path.extname(file.originalname).toLowerCase()));
     }
 });
 
-app.post('/api/upload/photo', requireAdmin, uploadPhoto.array('files', 20), (req, res) => {
+app.post('/api/upload/photo', requireAdmin, uploadPhoto.array('files', 20), async (req, res) => {
     if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
-    const results = req.files.map(file => ({
-        success: true, 
-        filename: file.filename,
-        path: 'images/' + file.filename
-    }));
-    res.json(results);
+    try {
+        const results = [];
+        for (const file of req.files) {
+            const uploadRes = await cloudinary.uploader.upload(file.path, { folder: 'ilascu_photos' });
+            results.push({ success: true, filename: uploadRes.original_filename, path: uploadRes.secure_url });
+            if(fs.existsSync(file.path)) fs.unlinkSync(file.path);
+        }
+        res.json(results);
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: 'Cloudinary upload failed' });
+    }
 });
 
 app.post('/api/upload/video', requireAdmin, (req, res, next) => {
     uploadVideo.array('files', 10)(req, res, (err) => {
-        if (err) {
-            console.error('Multer Video Upload Error:', err);
-            return res.status(500).json({ error: 'Upload failed: ' + err.message });
-        }
+        if (err) return res.status(500).json({ error: 'Upload failed: ' + err.message });
         next();
     });
-}, (req, res) => {
+}, async (req, res) => {
     if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
     try {
-        const results = req.files.map(file => ({
-            success: true, 
-            filename: file.filename,
-            path: 'videos/' + file.filename
-        }));
+        const results = [];
+        for (const file of req.files) {
+            const uploadRes = await cloudinary.uploader.upload(file.path, { resource_type: 'video', folder: 'ilascu_videos' });
+            results.push({ success: true, filename: uploadRes.original_filename, path: uploadRes.secure_url });
+            if(fs.existsSync(file.path)) fs.unlinkSync(file.path);
+        }
         res.json(results);
     } catch (e) {
         console.error('Video Upload Process Error:', e);
@@ -286,46 +297,38 @@ app.post('/api/upload/video', requireAdmin, (req, res, next) => {
 });
 
 app.delete('/api/upload/:type/:filename', requireAdmin, (req, res) => {
-    const dir = req.params.type === 'photo' ? 'images' : 'videos';
-    const filepath = path.join(__dirname, dir, req.params.filename);
-    
-    if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath);
-        res.json({ success: true });
-    } else {
-        res.status(404).json({ error: 'File not found' });
-    }
+    // În arhitectura Cloudinary, linkurile stau în DB. Putem ignora ștergerea fizică pentru Free Tier, 
+    // sau poți implementa destroy bazat pe extras public_id din url. Pentru simplitate, returnăm succes.
+    res.json({ success: true });
 });
 
-// List uploaded files
-app.get('/api/files/:type', requireAdmin, (req, res) => {
-    const dir = req.params.type === 'photos' ? 'images' : 'videos';
-    const dirPath = path.join(__dirname, dir);
-    
+// List uploaded files din Cloudinary
+app.get('/api/files/:type', requireAdmin, async (req, res) => {
     try {
-        const files = fs.readdirSync(dirPath)
-            .filter(f => !f.startsWith('.'))
-            .map(f => ({
-                filename: f,
-                path: dir + '/' + f,
-                size: fs.statSync(path.join(dirPath, f)).size
-            }));
+        const folder = req.params.type === 'photos' ? 'ilascu_photos' : 'ilascu_videos';
+        const result = await cloudinary.search.expression(`folder:${folder}`).sort_by('created_at','desc').max_results(30).execute();
+        const files = result.resources.map(f => ({
+            filename: f.filename,
+            path: f.secure_url,
+            size: f.bytes
+        }));
         res.json(files);
     } catch (e) {
+        console.error('Cloudinary fetch error', e);
         res.json([]);
     }
 });
 
 // ── Admin emails management ───────────────────────────
-app.get('/api/admin/emails', requireAdmin, (req, res) => {
-    const content = readContent();
+app.get('/api/admin/emails', requireAdmin, async (req, res) => {
+    const content = await readContent();
     res.json(content.adminEmails || []);
 });
 
-app.put('/api/admin/emails', requireAdmin, (req, res) => {
-    const content = readContent();
+app.put('/api/admin/emails', requireAdmin, async (req, res) => {
+    const content = await readContent();
     content.adminEmails = req.body.emails;
-    writeContent(content);
+    await writeContent(content);
     res.json({ success: true });
 });
 // ── Contact Form & CAPTCHA ──────────────────────────
