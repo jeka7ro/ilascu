@@ -186,7 +186,7 @@ const uploadVideo = multer({
     }
 });
 
-app.post('/api/upload/photo', requireAdmin, uploadPhoto.array('files', 20), async (req, res) => {
+app.post('/api/upload/photo', requireAdmin, uploadPhoto.any(), async (req, res) => {
     if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
     try {
         const results = [];
@@ -194,6 +194,11 @@ app.post('/api/upload/photo', requireAdmin, uploadPhoto.array('files', 20), asyn
             const uploadRes = await cloudinary.uploader.upload(file.path, { folder: 'ilascu_photos' });
             results.push({ success: true, filename: uploadRes.original_filename, path: uploadRes.secure_url });
             if(fs.existsSync(file.path)) fs.unlinkSync(file.path);
+        }
+        
+        // Backward-compatibility: if the frontend sent a classic singular 'file' payload, return an object directly
+        if (req.files.length === 1 && req.files[0].fieldname === 'file') {
+            return res.json(results[0]);
         }
         res.json(results);
     } catch(err) {
@@ -203,7 +208,7 @@ app.post('/api/upload/photo', requireAdmin, uploadPhoto.array('files', 20), asyn
 });
 
 app.post('/api/upload/video', requireAdmin, (req, res, next) => {
-    uploadVideo.array('files', 10)(req, res, (err) => {
+    uploadVideo.any()(req, res, (err) => {
         if (err) return res.status(500).json({ error: 'Upload failed: ' + err.message });
         next();
     });
@@ -215,6 +220,10 @@ app.post('/api/upload/video', requireAdmin, (req, res, next) => {
             const uploadRes = await cloudinary.uploader.upload(file.path, { resource_type: 'video', folder: 'ilascu_videos' });
             results.push({ success: true, filename: uploadRes.original_filename, path: uploadRes.secure_url });
             if(fs.existsSync(file.path)) fs.unlinkSync(file.path);
+        }
+        
+        if (req.files.length === 1 && req.files[0].fieldname === 'file') {
+            return res.json(results[0]);
         }
         res.json(results);
     } catch (e) {
