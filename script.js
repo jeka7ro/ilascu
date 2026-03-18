@@ -69,13 +69,18 @@ function renderBilingualContent() {
     // Hero
     if (data.hero) {
         const heroTitle = document.querySelector('.hero-title');
-        const heroSubtitle = document.querySelector('.hero-subtitle');
+        const heroSubtitle = document.getElementById('heroSubtitle');
         const heroDates = document.querySelector('.hero-dates');
         const heroQuote = document.querySelector('.hero-quote');
         const heroImg = document.querySelector('.hero-image img');
+        const siteFooter = document.getElementById('siteFooterText');
         
-        if (heroTitle) heroTitle.textContent = t(data.hero.title);
-        if (heroSubtitle) heroSubtitle.textContent = t(data.hero.subtitle);
+        if (heroTitle && data.hero.title) heroTitle.innerHTML = escHtml(t(data.hero.title));
+        if (heroSubtitle && data.hero.subtitle) heroSubtitle.innerHTML = escHtml(t(data.hero.subtitle));
+        
+        if (siteFooter && data.settings && data.settings.footerText) {
+            siteFooter.innerHTML = escHtml(data.settings.footerText);
+        }
         if (heroDates) heroDates.textContent = t(data.hero.dates);
         if (heroQuote) heroQuote.textContent = t(data.hero.quote);
         if (heroImg && data.hero.image) heroImg.src = data.hero.image;

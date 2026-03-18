@@ -27,6 +27,10 @@
                     <label for="loginPassword">Parolă</label>
                     <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
                 </div>
+                <div class="form-field" style="flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.5rem; margin-bottom: 1.5rem; position: relative;">
+                    <input type="checkbox" id="rememberPassword" checked style="width: auto; position: static; transform: none; box-shadow: none;">
+                    <label for="rememberPassword" style="position: static; font-size: 0.85rem; color: var(--text-secondary); pointer-events: auto; padding: 0;">Păstrează-mă autentificat (Memorează Parola)</label>
+                </div>
                 <button type="submit" class="btn-login">Autentificare</button>
                 <div id="loginError" class="login-error" style="display:none;"></div>
             </form>
@@ -61,6 +65,10 @@
                 <a href="#" class="nav-item" data-section="videos">
                     <span class="nav-icon">🎬</span>
                     <span>Galerie Video</span>
+                </a>
+                <a href="#" class="nav-item" data-section="contact">
+                    <span class="nav-icon">📧</span>
+                    <span>Contact</span>
                 </a>
                 <a href="#" class="nav-item" data-section="links">
                     <span class="nav-icon">🔗</span>

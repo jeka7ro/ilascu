@@ -7,7 +7,13 @@ let selectedPhotoIds = new Set();
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
     const savedEmail = localStorage.getItem('adminSavedEmail');
+    const savedPass = localStorage.getItem('adminSavedPass');
     if (savedEmail) document.getElementById('loginEmail').value = savedEmail;
+    if (savedPass) {
+        document.getElementById('loginPassword').value = atob(savedPass);
+        const rememberCheckbox = document.getElementById('rememberPassword');
+        if (rememberCheckbox) rememberCheckbox.checked = true;
+    }
     
     const res = await fetch('/api/admin/check');
     const auth = await res.json();
@@ -60,7 +66,14 @@ async function handleLogin(e) {
         });
         
         if (res.ok) {
-            localStorage.setItem('adminSavedEmail', email);
+            const remember = document.getElementById('rememberPassword');
+            if (remember && remember.checked) {
+                localStorage.setItem('adminSavedEmail', email);
+                localStorage.setItem('adminSavedPass', btoa(password));
+            } else {
+                localStorage.removeItem('adminSavedEmail');
+                localStorage.removeItem('adminSavedPass');
+            }
             showDashboard(email);
         } else {
             const data = await res.json();
@@ -713,6 +726,14 @@ function renderSettings() {
             </div>
         </div>
         <div class="edit-card">
+            <h3>📝 Text Subsol (Footer)</h3>
+            <p style="color:var(--text-secondary);font-size:0.75rem;margin-bottom:0.75rem">Textul de copyright de la baza site-ului.</p>
+            <div class="form-field">
+                <input type="text" id="settingFooterText" value="${String(s.footerText || '© ' + new Date().getFullYear() + ' Memorial Ilie Ilașcu (1952-2025). Toate drepturile rezervate.').replace(/\"/g, '&quot;')}" style="width:100%;padding:0.65rem;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-primary);outline:none">
+                <button class="btn-primary-sm" onclick="saveFooterText()" style="margin-top:0.5rem">Actualizează Footer</button>
+            </div>
+        </div>
+        <div class="edit-card">
             <h3>🔒 Securitate (Schimbă Parola)</h3>
             <p style="color:var(--text-secondary);font-size:0.75rem;margin-bottom:1rem">Schimbă parola de acces pentru panoul de administrare.</p>
             <div class="form-field">
@@ -762,6 +783,14 @@ async function changePassword() {
     }
 }
 
+async function saveFooterText() {
+    const text = document.getElementById('settingFooterText').value;
+    contentData.settings = contentData.settings || {};
+    contentData.settings.footerText = text;
+    await saveAllContent();
+    showToast('✓ Footer actualizat și salvat online', 'success');
+}
+
 async function uploadFavicon(input) {
     const file = input.files[0];
     if (!file) return;
@@ -774,7 +803,6 @@ async function uploadFavicon(input) {
             contentData.settings = contentData.settings || {};
             contentData.settings.favicon = data.path;
             renderSection('settings');
-            showToast('✓ Favicon actualizat', 'success');
             
             // Actualizează favicon-ul în admin instantaneu
             let link = document.querySelector("link[rel~='icon']");
@@ -784,6 +812,9 @@ async function uploadFavicon(input) {
                 document.head.appendChild(link);
             }
             link.href = '/' + data.path;
+            
+            await saveAllContent();
+            showToast('✓ Favicon încărcat și salvat automat pe site!', 'success');
         }
     } catch (err) { showToast('Eroare la încărcare favicon', 'error'); }
 }

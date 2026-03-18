@@ -136,8 +136,9 @@ body {
 /* Hero Section */
 .hero {
     position: relative;
-    height: 100vh;
-    min-height: 700px;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 60px;
     background: linear-gradient(135deg, #002B7F 0%, #FCD116 50%, #CE1126 100%);
     display: flex;
     align-items: center;
