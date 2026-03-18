@@ -132,13 +132,21 @@ function renderBilingualContent() {
     }
     
     // Photo Gallery
+    const photoSection = document.getElementById('gallery');
+    const photoGrid = document.querySelector('.gallery-grid');
     if (data.photos && data.photos.length > 0) {
+        if (photoSection) photoSection.style.display = 'block';
         renderPhotoGallery();
+    } else {
+        if (photoGrid) photoGrid.innerHTML = '';
+        if (photoSection) photoSection.style.display = 'none';
     }
     
     // Videos
+    const videoSection = document.getElementById('videos');
+    const videoGrid = document.getElementById('videoGallery');
     if (data.videos && data.videos.length > 0) {
-        const videoGrid = document.getElementById('videoGallery');
+        if (videoSection) videoSection.style.display = 'block';
         if (videoGrid) {
             const sorted = [...data.videos].sort((a, b) => a.order - b.order);
             videoData.length = 0;
