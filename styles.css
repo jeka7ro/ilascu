@@ -724,6 +724,17 @@ body {
     transition: var(--transition);
 }
 
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: transparent;
+    transition: color 0.3s;
+}
+
+.form-group input:focus::placeholder,
+.form-group textarea:focus::placeholder {
+    color: #999;
+}
+
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;

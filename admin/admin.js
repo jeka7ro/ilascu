@@ -2,9 +2,13 @@
 let contentData = {};
 let currentSection = 'hero';
 let selectedVideoIds = new Set();
+let selectedPhotoIds = new Set();
 
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+    const savedEmail = localStorage.getItem('adminSavedEmail');
+    if (savedEmail) document.getElementById('loginEmail').value = savedEmail;
+    
     const res = await fetch('/api/admin/check');
     const auth = await res.json();
     
@@ -56,6 +60,7 @@ async function handleLogin(e) {
         });
         
         if (res.ok) {
+            localStorage.setItem('adminSavedEmail', email);
             showDashboard(email);
         } else {
             const data = await res.json();
@@ -312,6 +317,8 @@ function renderActivities() {
 
 // ── Photos Section ────────────────────────────────────
 function renderPhotos() {
+    // Asigura-te ca vechile fotografii au id-uri pentru selectie in masa
+    (contentData.photos || []).forEach((p, i) => { if (!p.id) p.id = 'p-' + i + '-' + Date.now(); });
     const photos = (contentData.photos || []).sort((a, b) => a.order - b.order);
     
     let html = `
@@ -324,12 +331,24 @@ function renderPhotos() {
             </div>
         </div>
         <div class="edit-card">
-            <h3>🖼️ Fotografii (${photos.length})</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3>🖼️ Fotografii (${photos.length})</h3>
+                <div class="bulk-actions-toggle">
+                    <label style="font-size:0.85rem; cursor:pointer;">
+                        <input type="checkbox" id="selectAllPhotos" ${selectedPhotoIds.size === photos.length && photos.length > 0 ? 'checked' : ''} onchange="toggleSelectAllPhotos(this.checked)"> 
+                        Selectează Tot
+                    </label>
+                </div>
+            </div>
             <div class="admin-gallery-grid" id="photosGrid">`;
     
     photos.forEach((photo, i) => {
+        const isSelected = selectedPhotoIds.has(photo.id);
         html += `
-            <div class="admin-gallery-item" draggable="true" data-index="${i}">
+            <div class="admin-gallery-item ${isSelected ? 'selected' : ''}" draggable="true" data-index="${i}" data-id="${photo.id}">
+                <div class="item-selector" style="position:absolute;top:5px;left:5px;z-index:10;background:rgba(0,0,0,0.5);border-radius:4px;padding:2px">
+                    <input type="checkbox" class="photo-checkbox" data-id="${photo.id}" ${isSelected ? 'checked' : ''} onchange="togglePhotoSelection('${photo.id}', this.checked)">
+                </div>
                 <img src="${photo.src.startsWith('http') ? photo.src : '/' + photo.src}" alt="${esc(photo.caption)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22><rect fill=%22%23232734%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22100%22 fill=%22%235c6078%22 text-anchor=%22middle%22 font-size=%2214%22>Eroare</text></svg>'">
                 <div class="item-overlay">
                     <button class="btn-icon" onclick="editPhoto(${i})" title="Editează">✏️</button>
@@ -339,8 +358,41 @@ function renderPhotos() {
             </div>`;
     });
     
-    html += `</div></div>`;
+    html += `</div>
+        <div id="bulkActionsBarPhotos" class="bulk-actions-bar ${selectedPhotoIds.size > 0 ? 'active' : ''}">
+            <span>${selectedPhotoIds.size} selectate</span>
+            <div class="bulk-buttons">
+                <button class="btn-small danger" onclick="bulkDeletePhotos()">🗑️ Ștergere în masă</button>
+            </div>
+        </div>
+    </div>`;
     return html;
+}
+
+// ── Photo Bulk Actions ───────────────────────────────
+function toggleSelectAllPhotos(checked) {
+    selectedPhotoIds.clear();
+    if (checked) {
+        (contentData.photos || []).forEach(p => selectedPhotoIds.add(p.id));
+    }
+    renderSection('photos');
+}
+
+function togglePhotoSelection(id, checked) {
+    if (checked) selectedPhotoIds.add(id);
+    else selectedPhotoIds.delete(id);
+    renderSection('photos');
+}
+
+function bulkDeletePhotos() {
+    if (selectedPhotoIds.size === 0) return;
+    if (confirm(`Sigur vrei să ștergi ${selectedPhotoIds.size} fotografii?`)) {
+        contentData.photos = contentData.photos.filter(p => !selectedPhotoIds.has(p.id));
+        selectedPhotoIds.clear();
+        contentData.photos.forEach((p, i) => p.order = i); // Normalize order
+        renderSection('photos');
+        showToast('✓ Fotografiile au fost șterse local. Salvează pentru confirmare permanentă.', 'success');
+    }
 }
 
 // ── Videos Section ────────────────────────────────────
