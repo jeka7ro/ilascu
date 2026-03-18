@@ -178,6 +178,10 @@ function renderBilingualContent() {
                 item.style.transform = 'translateY(0)';
             });
         }
+    } else {
+        if (videoGrid) videoGrid.innerHTML = '';
+        if (videoSection) videoSection.style.display = 'none';
+        videoData.length = 0;
     }
     
     // Contact
