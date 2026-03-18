@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -11,11 +11,11 @@ const PORT = 3311;
 // ── Middleware ──────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(session({
-    secret: 'ilascu-memorial-admin-secret-2026',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24h
+app.set('trust proxy', 1);
+app.use(cookieSession({
+    name: 'ilascu-session',
+    keys: ['ilascu-memorial-admin-secret-2026'],
+    maxAge: 24 * 60 * 60 * 1000 // 24h
 }));
 
 require('dotenv').config();
@@ -77,7 +77,7 @@ app.post('/api/admin/login', async (req, res) => {
 });
 
 app.post('/api/admin/logout', (req, res) => {
-    req.session.destroy();
+    req.session = null;
     res.json({ success: true });
 });
 
