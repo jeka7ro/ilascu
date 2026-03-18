@@ -297,6 +297,19 @@ app.delete('/api/upload/:type/:filename', requireAdmin, (req, res) => {
     }
 });
 
+// ── Auto-Deploy (Git Push) ────────────────────────────
+const { exec } = require('child_process');
+app.post('/api/deploy', requireAdmin, (req, res) => {
+    const cmd = 'git add -A && (git diff-index --quiet HEAD || git commit -m "Auto-deploy via Admin CMS") && git push';
+    exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+            console.error('Git deploy error:', error.message);
+            return res.status(500).json({ success: false, error: error.message });
+        }
+        res.json({ success: true, message: 'Deployed successfully to GitHub' });
+    });
+});
+
 // List uploaded files
 app.get('/api/files/:type', requireAdmin, (req, res) => {
     const dir = req.params.type === 'photos' ? 'images' : 'videos';

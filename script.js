@@ -8,7 +8,7 @@ document.addEventListener('dragstart', e => e.preventDefault());
 
 async function loadDynamicContent() {
     try {
-        const res = await fetch('/api/content');
+        const res = await fetch('/data/content.json');
         if (!res.ok) return;
         cachedContent = await res.json();
         
